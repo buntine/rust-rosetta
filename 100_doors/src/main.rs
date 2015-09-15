@@ -6,7 +6,7 @@ fn main() {
         d = p;
         while d < doors.len() {
             doors[d] = !doors[d];
-            d += (p + 1);
+            d += p + 1;
         }
     }
 
