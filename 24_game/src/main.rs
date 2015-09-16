@@ -1,38 +1,52 @@
 struct Stack {
-    content: Vec<i32>,
+    content: Vec<u32>,
 }
 
 impl Stack {
-    fn push(&mut self, d: i32) {
+    fn push(&mut self, d: u32) -> Result<u32, &str> {
         self.content.push(d);
+        Ok(d);
     }
 
-    fn multiply(&mut self) {
-        let r = self.content.pop().expect("Stack empty!");
-        let l = self.content.pop().expect("Stack empty!");
-
-        self.content.push(l * r);
+    fn pop(&mut self) -> u32 {
+        self.content.pop().expect("Stack empty!")
     }
 
-    fn add(&mut self) {
-        let r = self.content.pop().expect("Stack empty!");
-        let l = self.content.pop().expect("Stack empty!");
+    fn addDigit(&mut self, c: char) -> Result<u32, &str> {
+        let d = c.to_digit(10);
 
-        self.content.push(l + r);
+        match d {
+            Some(n) => self.push(n),
+            None    => Err("Invalid character"),
+        }
     }
 
-    fn subtract(&mut self) {
-        let r = self.content.pop().expect("Stack empty!");
-        let l = self.content.pop().expect("Stack empty!");
+    fn multiply(&mut self) -> Result<u32, &str> {
+        let r = self.pop();
+        let l = self.pop();
 
-        self.content.push(l - r);
+        self.push(l * r);
     }
 
-    fn divide(&mut self) {
-        let r = self.content.pop().expect("Stack empty!");
-        let l = self.content.pop().expect("Stack empty!");
+    fn add(&mut self) -> Result<u32, &str> {
+        let r = self.pop();
+        let l = self.pop();
 
-        self.content.push(l / r);
+        self.push(l + r);
+    }
+
+    fn subtract(&mut self) -> Result<u32, &str> {
+        let r = self.pop();
+        let l = self.pop();
+
+        self.push(l - r);
+    }
+
+    fn divide(&mut self) -> Result<u32, &str> {
+        let r = self.pop();
+        let l = self.pop();
+
+        self.push(l / r);
     }
 }
 
@@ -40,22 +54,21 @@ fn evaluate(program: Vec<char>) {
     let mut stack = Stack { content: vec![] };
 
     for c in program {
-        match c {
+        let answer: Result<u32, &str> = match c {
             '*' => stack.multiply(),
             '+' => stack.add(),
             '-' => stack.subtract(),
             '/' => stack.divide(),
-            '1' => stack.push(1),
-            '2' => stack.push(2),
-            '3' => stack.push(3),
-            '4' => stack.push(4),
-            '5' => stack.push(5),
-            '6' => stack.push(6),
-            '7' => stack.push(7),
-            '8' => stack.push(8),
-            '9' => stack.push(9),
-            _   => println!("DIE..."),
-        }
+            _   => stack.addDigit(c),
+        };
+
+        match answer {
+            Ok(n) => continue,
+            Err(e) => {
+                println!("{}", e);
+                break;
+            }
+        };
     }
 
     for c in stack.content {
