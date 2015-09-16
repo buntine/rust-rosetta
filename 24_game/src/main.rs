@@ -8,19 +8,31 @@ impl Stack {
     }
 
     fn multiply(&mut self) {
-        println!("Multiply");
+        let r = self.content.pop().expect("Stack empty!");
+        let l = self.content.pop().expect("Stack empty!");
+
+        self.content.push(l * r);
     }
 
     fn add(&mut self) {
-        println!("Add");
+        let r = self.content.pop().expect("Stack empty!");
+        let l = self.content.pop().expect("Stack empty!");
+
+        self.content.push(l + r);
     }
 
     fn subtract(&mut self) {
-        println!("Subtract");
+        let r = self.content.pop().expect("Stack empty!");
+        let l = self.content.pop().expect("Stack empty!");
+
+        self.content.push(l - r);
     }
 
     fn divide(&mut self) {
-        println!("Divide");
+        let r = self.content.pop().expect("Stack empty!");
+        let l = self.content.pop().expect("Stack empty!");
+
+        self.content.push(l / r);
     }
 }
 
