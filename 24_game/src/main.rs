@@ -3,7 +3,7 @@ struct Stack {
 }
 
 impl Stack {
-    fn push(&mut self, d: u32) -> Result<u32, &str> {
+    fn push(&mut self, d: u32) -> Result<u32, _> {
         self.content.push(d);
         Ok(d);
     }
