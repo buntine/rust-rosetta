@@ -5,14 +5,14 @@ struct Stack {
 impl Stack {
     fn push(&mut self, d: u32) -> Result<u32, &str> {
         self.content.push(d);
-        Ok(d);
+        return Ok(d);
     }
 
     fn pop(&mut self) -> u32 {
         self.content.pop().expect("Stack empty!")
     }
 
-    fn addDigit(&mut self, c: char) -> Result<u32, &str> {
+    fn add_digit(&mut self, c: char) -> Result<u32, &str> {
         match c.to_digit(10) {
             Some(n) => self.push(n),
             None    => Err("Invalid character"),
@@ -23,28 +23,28 @@ impl Stack {
         let r = self.pop();
         let l = self.pop();
 
-        self.push(l * r);
+        return self.push(l * r);
     }
 
     fn add(&mut self) -> Result<u32, &str> {
         let r = self.pop();
         let l = self.pop();
 
-        self.push(l + r);
+        return self.push(l + r);
     }
 
     fn subtract(&mut self) -> Result<u32, &str> {
         let r = self.pop();
         let l = self.pop();
 
-        self.push(l - r);
+        return self.push(l - r);
     }
 
     fn divide(&mut self) -> Result<u32, &str> {
         let r = self.pop();
         let l = self.pop();
 
-        self.push(l / r);
+        return self.push(l / r);
     }
 }
 
@@ -57,15 +57,15 @@ fn evaluate(program: Vec<char>) {
             '+' => stack.add(),
             '-' => stack.subtract(),
             '/' => stack.divide(),
-            _   => stack.addDigit(c),
+            _   => stack.add_digit(c),
         };
 
         match answer {
-            Ok(n) => continue,
             Err(e) => {
                 println!("{}", e);
                 break;
-            }
+            },
+            _      => continue,
         };
     }
 
