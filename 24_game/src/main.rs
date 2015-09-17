@@ -3,7 +3,7 @@ struct Stack {
 }
 
 impl Stack {
-    fn push(&mut self, d: u32) -> Result<u32, _> {
+    fn push(&mut self, d: u32) -> Result<u32, &str> {
         self.content.push(d);
         Ok(d);
     }
@@ -13,9 +13,7 @@ impl Stack {
     }
 
     fn addDigit(&mut self, c: char) -> Result<u32, &str> {
-        let d = c.to_digit(10);
-
-        match d {
+        match c.to_digit(10) {
             Some(n) => self.push(n),
             None    => Err("Invalid character"),
         }
