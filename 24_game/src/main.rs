@@ -8,8 +8,8 @@ impl Stack {
         return Ok(d);
     }
 
-    fn pop(&mut self) -> u32 {
-        self.content.pop().expect("Stack empty!")
+    fn pop(&mut self) -> Option<u32> {
+        return self.content.pop();
     }
 
     fn add_digit(&mut self, c: char) -> Result<u32, &str> {
@@ -23,28 +23,60 @@ impl Stack {
         let r = self.pop();
         let l = self.pop();
 
-        return self.push(l * r);
+        match l {
+            Some(n) => {
+                match r {
+                    Some(i) => self.push(n * i),
+                    None => Err("Stack empty"),
+                }
+            },
+            None => Err("Stack empty"),
+        }
     }
 
     fn add(&mut self) -> Result<u32, &str> {
         let r = self.pop();
         let l = self.pop();
 
-        return self.push(l + r);
+        match l {
+            Some(n) => {
+                match r {
+                    Some(i) => self.push(n * i),
+                    None => Err("Stack empty"),
+                }
+            },
+            None => Err("Stack empty"),
+        }
     }
 
     fn subtract(&mut self) -> Result<u32, &str> {
         let r = self.pop();
         let l = self.pop();
 
-        return self.push(l - r);
+        match l {
+            Some(n) => {
+                match r {
+                    Some(i) => self.push(n * i),
+                    None => Err("Stack empty"),
+                }
+            },
+            None => Err("Stack empty"),
+        }
     }
 
     fn divide(&mut self) -> Result<u32, &str> {
         let r = self.pop();
         let l = self.pop();
 
-        return self.push(l / r);
+        match l {
+            Some(n) => {
+                match r {
+                    Some(i) => self.push(n * i),
+                    None => Err("Stack empty"),
+                }
+            },
+            None => Err("Stack empty"),
+        }
     }
 }
 
@@ -60,13 +92,10 @@ fn evaluate(program: Vec<char>) {
             _   => stack.add_digit(c),
         };
 
-        match answer {
-            Err(e) => {
-                println!("{}", e);
-                break;
-            },
-            _      => continue,
-        };
+        if answer.is_err() {
+            println!("{}", answer.unwrap_err());
+            break;
+        }
     }
 
     for c in stack.content {
