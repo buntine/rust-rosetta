@@ -14,7 +14,8 @@ impl Stack {
     }
 
     fn consume_digit(&mut self, d: i32) {
-        self.digits.iter().position(|&i| i == d).expect("Cannot consume!");
+        let i = self.digits.iter().position(|&i| i == d).expect("Cannot consume!");
+        self.digits.remove(i);
     }
 
     fn valid_digit(&self, d: i32) -> bool {
@@ -62,12 +63,11 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
             '+' => stack.apply(|l, r| l + r),
             '-' => stack.apply(|l, r| l - r),
             '/' => stack.apply(|l, r| l / r),
-            _   => stack.add_digit(c),
+            _ => stack.add_digit(c),
         };
 
         if answer.is_err() {
             // TODO: Fix this. Work out how to return "answer" without compiler error.
-            // return answer;
             println!("Actual: {}", answer.unwrap_err());
             return Err("Program error");
         }
@@ -80,13 +80,15 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
 }
 
 fn main() {
-    let program: Vec<char> = "3 4 * 2 * 1 /".chars().filter(|&c| c != ' ').collect();
+    let program: Vec<char> = "3 2 * 4 * 1 /".chars().filter(|&c| c != ' ').collect();
+    let goal: i32 = 24;
     let digits: Vec<i32> = vec![2, 3, 1, 4];
 
     match evaluate(program, digits) {
-        Ok(n) => match n {
-            24 => println!("Well done!"),
-            _  => println!("Nice try, but {} is not 24!", n),
+        Ok(n) => if n == goal {
+            println!("Well done!");
+        } else {
+            println!("Nice try, but {} is not {}!", n, goal);
         },
         Err(s) => {
             println!("Oops: {}", s);
