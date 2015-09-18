@@ -1,21 +1,29 @@
 struct Stack {
     content: Vec<i32>,
+    digits: Vec<i32>,
 }
 
 impl Stack {
     fn push(&mut self, d: i32) -> Result<i32, &str> {
         self.content.push(d);
-        return Ok(d);
+        Ok(d)
     }
 
     fn pop(&mut self) -> Option<i32> {
-        return self.content.pop();
+        self.content.pop()
+    }
+
+    fn valid_digit(&self, d: i32) -> bool {
+        self.digits.contains(&d)
     }
 
     fn add_digit(&mut self, c: char) -> Result<i32, &str> {
         match c.to_digit(10) {
-            Some(n) => self.push(n as i32),
-            None    => Err("Invalid character"),
+            Some(n) => match self.valid_digit(n as i32) {
+                true => self.push(n as i32),
+                false => Err("Invalid digit!"),
+            },
+            None => Err("Invalid character"),
         }
     }
 
@@ -26,19 +34,20 @@ impl Stack {
         let l = self.pop();
 
         match l {
-            Some(n) => {
-                match r {
-                    Some(i) => self.push(f(n, i)),
-                    None => Err("Stack empty"),
-                }
+            Some(n) => match r {
+                Some(i) => self.push(f(n, i)),
+                None => Err("Stack empty"),
             },
             None => Err("Stack empty"),
         }
     }
 }
 
-fn evaluate<'a>(program: Vec<char>) -> Result<i32, &'a str> {
-    let mut stack = Stack { content: vec![] };
+fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
+    let mut stack = Stack {
+        content: vec![],
+        digits: digits,
+    };
 
     for c in program {
         let answer: Result<i32, &str> = match c {
@@ -63,14 +72,12 @@ fn evaluate<'a>(program: Vec<char>) -> Result<i32, &'a str> {
 
 fn main() {
     let program: Vec<char> = "3 4 * 2 * 1 /".chars().filter(|&c| c != ' ').collect();
+    let digits: Vec<i32> = vec![1, 2, 3, 4];
 
-    match evaluate(program) {
-        Ok(n) => {
-            if n == 24 {
-                println!("Well done!");
-            } else {
-                println!("Nice try, but {} is not 24!", n);
-            }
+    match evaluate(program, digits) {
+        Ok(n) => match n {
+            24 => println!("Well done!"),
+            _  => println!("Nice try, but {} is not 24!", n),
         },
         Err(s) => {
             println!("Oops: {}", s);
