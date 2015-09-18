@@ -22,6 +22,12 @@ impl Stack {
         self.digits.contains(&d)
     }
 
+    // TODO: Also check that digits.len() == 0
+    //       And return a "Result".
+    fn reveal(&self) -> usize {
+        self.content.len()
+    }
+
     fn add_digit(&mut self, c: char) -> Result<i32, &str> {
         match c.to_digit(10) {
             Some(n) => match self.valid_digit(n as i32) {
@@ -73,7 +79,7 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
         }
     }
 
-    match stack.content.len() {
+    match stack.reveal() {
         1 => Ok(stack.content[0]),
         _ => Err("Invalid formula"),
     }
