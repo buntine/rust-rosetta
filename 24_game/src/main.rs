@@ -13,6 +13,10 @@ impl Stack {
         self.content.pop()
     }
 
+    fn consume_digit(&mut self, d: i32) {
+        self.digits.retain(|&n| n != d);
+    }
+
     fn valid_digit(&self, d: i32) -> bool {
         self.digits.contains(&d)
     }
@@ -20,8 +24,11 @@ impl Stack {
     fn add_digit(&mut self, c: char) -> Result<i32, &str> {
         match c.to_digit(10) {
             Some(n) => match self.valid_digit(n as i32) {
-                true => self.push(n as i32),
-                false => Err("Invalid digit!"),
+                true => {
+                    self.consume_digit(n as i32);
+                    self.push(n as i32)
+                },
+                false => Err("Invalid or duplicate digit!"),
             },
             None => Err("Invalid character"),
         }
