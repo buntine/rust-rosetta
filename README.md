@@ -1,1 +1,3 @@
-Experimenting with Rust
+Learning Rust by completing random non-trivial tasks from http://rosettacode.org/wiki/Category:Programming_Tasks
+
+Expect bad code...
