@@ -14,7 +14,7 @@ impl Stack {
     }
 
     fn consume_digit(&mut self, d: i32) {
-        self.digits.retain(|&n| n != d);
+        self.digits.iter().position(|&i| i == d).expect("Cannot consume!");
     }
 
     fn valid_digit(&self, d: i32) -> bool {
@@ -81,7 +81,7 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
 
 fn main() {
     let program: Vec<char> = "3 4 * 2 * 1 /".chars().filter(|&c| c != ' ').collect();
-    let digits: Vec<i32> = vec![1, 2, 3, 4];
+    let digits: Vec<i32> = vec![2, 3, 1, 4];
 
     match evaluate(program, digits) {
         Ok(n) => match n {
