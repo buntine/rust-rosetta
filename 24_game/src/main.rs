@@ -95,11 +95,11 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
 fn main() {
     let goal: i32 = 24;
     let mut rng = thread_rng();
-    let mut program = String::new();
 
     println!("GUESSING GAME!\n");
 
     loop {
+        let mut program = String::new();
         let digits = sample(&mut rng, 1..9, 4);
 
         println!("Your digits are: {}\n", digits.iter().fold("".to_string(), |acc, &d| acc + &d.to_string()[..] + ", "));
