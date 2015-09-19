@@ -117,12 +117,13 @@ fn main() {
 
         match evaluate(parsed, digits) {
             Ok(n) => if n == goal {
-                println!("Well done!");
+                println!("\nWell done!\n");
+                break;
             } else {
-                println!("Nice try, but {} is not {}!", n, goal);
+                println!("\nNice try, but {} is not {}!\n", n, goal);
             },
             Err(s) => {
-                println!("Oops: {}", s);
+                println!("\nOops: {}\n", s);
             },
         }
     }
