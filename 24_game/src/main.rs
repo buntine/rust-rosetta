@@ -77,10 +77,10 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
 
         if answer.is_err() {
             // TODO: Fix this. Work out how to return "answer" without compiler error.
-          //return answer;
-          //return Err("Program error");
-          println!("Actual: {}", answer.unwrap_err());
-          break;
+            //return answer;
+            //return Err("Program error");
+            println!("Actual: {}", answer.unwrap_err());
+            break;
         }
     }
 
