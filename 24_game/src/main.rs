@@ -28,11 +28,9 @@ impl Stack {
     }
 
     fn reveal<'a>(&self) -> Result<i32, &'a str> {
-        match self.content.len() {
-            1 => match self.digits.len() {
-                0 => Ok(self.content[0]),
-                _ => Err("Did not use all digits!"),
-            },
+        match (self.content.len(), self.digits.len()) {
+            (1, 0) => Ok(self.content[0]),
+            (1, _) => Err("Did not use all digits!"),
             _ => Err("Invalid formula!"),
         }
     }
@@ -53,15 +51,11 @@ impl Stack {
     fn apply<F>(&mut self, f: F) -> Result<i32, &str>
         where F : Fn(i32, i32) -> i32 {
 
-        let r = self.pop();
-        let l = self.pop();
+        let (r, l) = (self.pop(), self.pop());
 
-        match l {
-            Some(n) => match r {
-                Some(i) => self.push(f(n, i)),
-                None => Err("Stack empty"),
-            },
-            None => Err("Stack empty"),
+        match (l, r) {
+            (Some(x), Some(y)) => self.push(f(x, y)),
+            _ => Err("Stack empty"),
         }
     }
 }
@@ -83,9 +77,10 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
 
         if answer.is_err() {
             // TODO: Fix this. Work out how to return "answer" without compiler error.
-            //return answer;
-            println!("Actual: {}", answer.unwrap_err());
-            return Err("Program error");
+          //return answer;
+          //return Err("Program error");
+          println!("Actual: {}", answer.unwrap_err());
+          break;
         }
     }
 
