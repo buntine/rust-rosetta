@@ -96,7 +96,16 @@ fn main() {
     let goal: i32 = 24;
     let mut rng = thread_rng();
 
-    println!("GUESSING GAME!\n");
+    println!("GUESSING GAME!
+
+RULES
+
+  * Using only the given digits, create an expression that evaluates to 24.
+  * All digits must be used.
+  * Each digit may only be used once.
+  * Expressions must be in Reverse-Polish Notation (RPN).
+  * Only +, -, * and / are allowed.
+  * Order of the digits is not important.\n");
 
     loop {
         let mut program = String::new();
@@ -127,5 +136,4 @@ fn main() {
             },
         }
     }
-
 }
