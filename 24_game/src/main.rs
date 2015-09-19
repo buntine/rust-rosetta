@@ -22,10 +22,14 @@ impl Stack {
         self.digits.contains(&d)
     }
 
-    // TODO: Also check that digits.len() == 0
-    //       And return a "Result".
-    fn reveal(&self) -> usize {
-        self.content.len()
+    fn reveal<'a>(&self) -> Result<i32, &'a str> {
+        match self.content.len() {
+            1 => match self.digits.len() {
+                0 => Ok(self.content[0]),
+                _ => Err("Did not use all digits!"),
+            },
+            _ => Err("Invalid formula!"),
+        }
     }
 
     fn add_digit(&mut self, c: char) -> Result<i32, &str> {
@@ -74,15 +78,13 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
 
         if answer.is_err() {
             // TODO: Fix this. Work out how to return "answer" without compiler error.
-            println!("Actual: {}", answer.unwrap_err());
+            //return answer;
+            //println!("Actual: {}", answer.unwrap_err());
             return Err("Program error");
         }
     }
 
-    match stack.reveal() {
-        1 => Ok(stack.content[0]),
-        _ => Err("Invalid formula"),
-    }
+    stack.reveal()
 }
 
 fn main() {
