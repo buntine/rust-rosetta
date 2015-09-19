@@ -1,3 +1,8 @@
+extern crate rand;
+
+use std::io;
+use rand::{thread_rng, sample};
+
 struct Stack {
     content: Vec<i32>,
     digits: Vec<i32>,
@@ -79,7 +84,7 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
         if answer.is_err() {
             // TODO: Fix this. Work out how to return "answer" without compiler error.
             //return answer;
-            //println!("Actual: {}", answer.unwrap_err());
+            println!("Actual: {}", answer.unwrap_err());
             return Err("Program error");
         }
     }
@@ -88,18 +93,38 @@ fn evaluate<'a>(program: Vec<char>, digits: Vec<i32>) -> Result<i32, &'a str> {
 }
 
 fn main() {
-    let program: Vec<char> = "3 2 * 4 * 1 /".chars().filter(|&c| c != ' ').collect();
     let goal: i32 = 24;
-    let digits: Vec<i32> = vec![2, 3, 1, 4];
+    let mut rng = thread_rng();
+    let mut program = String::new();
 
-    match evaluate(program, digits) {
-        Ok(n) => if n == goal {
-            println!("Well done!");
-        } else {
-            println!("Nice try, but {} is not {}!", n, goal);
-        },
-        Err(s) => {
-            println!("Oops: {}", s);
-        },
+    println!("GUESSING GAME!\n");
+
+    loop {
+        let digits = sample(&mut rng, 1..9, 4);
+
+        println!("Your digits are: {}\n", digits.iter().fold("".to_string(), |acc, &d| acc + &d.to_string()[..] + ", "));
+        println!("Enter an expression:\n");
+
+        io::stdin().read_line(&mut program)
+            .ok()
+            .expect("Could not read input.");
+
+        let parsed = program
+            .trim()
+            .chars()
+            .filter(|&c| c != ' ')
+            .collect();
+
+        match evaluate(parsed, digits) {
+            Ok(n) => if n == goal {
+                println!("Well done!");
+            } else {
+                println!("Nice try, but {} is not {}!", n, goal);
+            },
+            Err(s) => {
+                println!("Oops: {}", s);
+            },
+        }
     }
+
 }
