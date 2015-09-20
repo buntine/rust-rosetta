@@ -106,7 +106,7 @@ RULES
         let mut program = String::new();
         let digits = sample(&mut rng, 1..9, 4);
 
-        println!("Your digits are: {}, {}, {} and {}\n", digits[0], digits[1], digits[2], digits[3]);
+        println!("Your digits are: {:?}\n", digits);
         println!("Enter an expression:\n");
 
         io::stdin().read_line(&mut program)
