@@ -1,8 +1,8 @@
 fn can_spell(w: &str, blocks: &Vec<&str>) -> bool {
     fn solve(chars: Vec<char>, avail_blocks: &Vec<&str>) -> bool {
-        if chars.len() == 0 {
+        if chars.is_empty() {
             true
-        } else if avail_blocks.len() == 0 {
+        } else if avail_blocks.is_empty() {
             false
         } else {
             let pos = avail_blocks.iter().position(|&b| b.chars().any(|c| c == chars[0]));
