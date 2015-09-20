@@ -1,12 +1,22 @@
 fn can_spell(w: &str, blocks: &Vec<&str>) -> bool {
-    fn solve(chars: Vec<&char>, avail_blocks: &Vec<&str>) -> bool {
+    fn solve(chars: Vec<char>, avail_blocks: &Vec<&str>) -> bool {
         if chars.len() == 0 {
             true
         } else if avail_blocks.len() == 0 {
             false
         } else {
-            match avail_blocks.iter().position(|&b| b.char_at(0) == *chars[0] || b.char_at(1) == *chars[0]) {
-                Some(i) => solve(chars.tail(), avail_blocks),
+            let pos = avail_blocks.iter().position(|&b| b.chars().any(|c| c == chars[0]));
+
+            match pos {
+                Some(n) => {
+                    let remaining_blocks = avail_blocks
+                            .iter()
+                            .enumerate()
+                            .filter(|&(i, _)| i != n)
+                            .map(|(_, &b)| b).collect();
+
+                    solve(chars[1..].to_vec(), &remaining_blocks)
+                },
                 None => false
             }
         }
