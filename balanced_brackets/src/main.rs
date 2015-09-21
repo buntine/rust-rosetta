@@ -1,5 +1,11 @@
-fn generate_expression(size: &i32) -> Vec<char> {
-    vec!['[', ']', ']', '[']
+use std::iter::repeat;
+
+fn generate_expression(size: &usize) -> Vec<char> {
+    let opens = repeat('[').take(*size);
+    let closes = repeat(']').take(*size);
+    let expr = opens.chain(&closes).collect(); 
+
+    expr
 }
 
 fn well_formed(expr: &Vec<char>) -> bool {
