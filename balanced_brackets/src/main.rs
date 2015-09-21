@@ -24,6 +24,6 @@ fn main() {
         let expr = generate_expression(&n);
         let wf = well_formed(&expr);
 
-        println!("{:?} is {}", expr, if wf {"well formed"} else {"NOT well formed"});
+        println!("{} is {}", expr.iter().collect(), if wf {"well formed"} else {"NOT well formed"});
     }
 }
