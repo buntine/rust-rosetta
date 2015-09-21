@@ -23,7 +23,10 @@ fn main() {
     for n in (1..10) {
         let expr = generate_expression(&n);
         let wf = well_formed(&expr);
+        let wf_str: String = expr.into_iter().collect();
 
-        println!("{} is {}", expr.iter().collect(), if wf {"well formed"} else {"NOT well formed"});
+        println!("'{}' is {}",
+                 wf_str,
+                 if wf {"well formed"} else {"NOT well formed"});
     }
 }
