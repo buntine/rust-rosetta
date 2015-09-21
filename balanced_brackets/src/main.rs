@@ -1,11 +1,17 @@
+extern crate rand;
+
 use std::iter::repeat;
+use rand::{thread_rng, Rng};
 
 fn generate_expression(size: &usize) -> Vec<char> {
     let opens = repeat('[').take(*size);
     let closes = repeat(']').take(*size);
-    let expr = opens.chain(closes);
+    let mut expr: Vec<char> = opens.chain(closes).collect();
 
-    expr.collect()
+    // Shuffle in place.
+    thread_rng().shuffle(&mut expr[..]);
+
+    expr
 }
 
 fn well_formed(expr: &Vec<char>) -> bool {
