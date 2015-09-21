@@ -1,9 +1,22 @@
 fn generate_expression(size: &i32) -> Vec<char> {
-    vec!['[', '[', ']', ']']
+    vec!['[', ']', ']', '[']
 }
 
 fn well_formed(expr: &Vec<char>) -> bool {
-    true
+    let mut count = 0;
+
+    for b in expr {
+        if count < 0 {
+            break;
+        }
+
+        match *b {
+            '[' => count += 1,
+            _ => count -= 1,
+        }
+    }
+
+    count == 0
 }
 
 fn main() {
