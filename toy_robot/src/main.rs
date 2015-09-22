@@ -46,10 +46,28 @@ impl Robot {
         }
     }
 
-    fn left(&mut self) {
+    fn right(&mut self) {
+        let d = match self.d {
+            Direction::North => Direction::East,
+            Direction::East => Direction::South,
+            Direction::South => Direction::West,
+            Direction::West => Direction::North,
+            _ => Direction::Empty,
+        };
+
+        self.d = d;
     }
 
-    fn right(&mut self) {
+    fn left(&mut self) {
+        let d = match self.d {
+            Direction::North => Direction::West,
+            Direction::West => Direction::South,
+            Direction::South => Direction::East,
+            Direction::East => Direction::North,
+            _ => Direction::Empty,
+        };
+
+        self.d = d;
     }
 
     fn step(&mut self) {
@@ -63,4 +81,5 @@ fn main() {
     let mut robot: Robot = Default::default();
 
     robot.place(1, 2, Direction::North);
+    robot.left();
 }
