@@ -82,9 +82,9 @@ impl Robot {
 
     fn step(&mut self) {
         match self.d {
-            Direction::North => if self.t.valid_pos(self.x, self.y - 1) {self.y -= 1;},
+            Direction::North => if self.t.valid_pos(self.x, self.y + 1) {self.y += 1;},
             Direction::East => if self.t.valid_pos(self.x + 1, self.y) {self.x += 1;},
-            Direction::South => if self.t.valid_pos(self.x, self.y + 1) {self.y += 1;},
+            Direction::South => if self.t.valid_pos(self.x, self.y - 1) {self.y -= 1;},
             Direction::West => if self.t.valid_pos(self.x - 1, self.y) {self.y -= 1;},
             _ => (),
         }
@@ -97,7 +97,4 @@ impl Robot {
 
 fn main() {
     let mut robot: Robot = Default::default();
-
-    robot.place(1, 2, Direction::North);
-    robot.left();
 }
