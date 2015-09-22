@@ -1,11 +1,5 @@
 #[derive(Eq, PartialEq)]
-enum Direction {
-    North,
-    East,
-    South,
-    West,
-    Empty,
-}
+enum Direction { North, East, South, West, Empty, }
 
 struct Table {
     w: i32,
