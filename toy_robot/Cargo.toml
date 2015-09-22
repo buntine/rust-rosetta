@@ -1,0 +1,4 @@
+[package]
+name = "toy_robot"
+version = "0.1.0"
+authors = ["Andrew Buntine Of Doom <bunts@hhd.com.au>"]
