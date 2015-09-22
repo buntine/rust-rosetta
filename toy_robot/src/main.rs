@@ -1,3 +1,4 @@
+#[derive(Eq, PartialEq)]
 enum Direction {
     North,
     East,
@@ -33,6 +34,10 @@ impl Table {
 }
 
 impl Robot {
+    fn is_placed(&self) -> bool {
+        self.d == Direction::Empty
+    }
+
     fn place(&mut self, x: i32, y: i32, d: Direction) {
         if self.t.valid_pos(x, y) {
             self.x = x;
@@ -45,6 +50,9 @@ impl Robot {
     }
 
     fn right(&mut self) {
+    }
+
+    fn step(&mut self) {
     }
 
     fn report(&self) {
