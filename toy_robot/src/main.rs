@@ -115,32 +115,30 @@ fn parse_place(args: &[&str]) -> (i32, i32, Direction) {
 }
 
 fn main() {
-    let mut robot: Robot = Default::default();
-    let commands = "MOVE
-                    LEFT
-                    PLACE 1 2 EAST
-                    MOVE
-                    MOVE
-                    LEFT
-                    MOVE
-                    REPORT";
+    let programs = ["PLACE 0 0 NORTH\nMOVE\nREPORT",
+                    "PLACE 0 0 NORTH\nLEFT\nREPORT",
+                    "MOVE\nLEFT\nPLACE 1 2 EAST\nEAST\nMOVE\nMOVE\nLEFT\nMOVE\nREPORT",
+                    "PLACE 0 0 EAST\nMOVE\nMOVE\nMOVE\nMOVE\nMOVE\nMOVE\nMOVE\nREPORT\nLEFT\nMOVE\nREPORT"];
 
-    let parsed: Vec<&str> = commands.split("\n").map(|c| c.trim()).collect();
+    for p in programs.iter() {
+        let mut robot: Robot = Default::default();
+        let parsed: Vec<&str> = p.split("\n").map(|c| c.trim()).collect();
 
-    for c in parsed {
-        let args: Vec<&str> = c.split(" ").collect();
+        for c in parsed {
+            let args: Vec<&str> = c.split(" ").collect();
 
-        if let Some(arg) = args.first() {
-            match *arg {
-                "PLACE" if args.len() == 4 => {
-                    let (x, y, d) = parse_place(&args[1..]);
-                    robot.place(x, y, d);
-                },
-                "MOVE" => robot.step(),
-                "LEFT" => robot.left(),
-                "RIGHT" => robot.right(),
-                "REPORT" => robot.report(),
-                _ => (),
+            if let Some(arg) = args.first() {
+                match *arg {
+                    "PLACE" if args.len() == 4 => {
+                        let (x, y, d) = parse_place(&args[1..]);
+                        robot.place(x, y, d);
+                    },
+                    "MOVE" => robot.step(),
+                    "LEFT" => robot.left(),
+                    "RIGHT" => robot.right(),
+                    "REPORT" => robot.report(),
+                    _ => (),
+                }
             }
         }
     }
