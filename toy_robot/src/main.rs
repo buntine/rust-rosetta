@@ -1,5 +1,7 @@
 #[derive(Eq, PartialEq)]
-enum Direction { North, East, South, West, Empty, }
+enum Direction { North, East, South, West, Unplaced, }
+
+use Direction::*;
 
 struct Table {
     w: i32,
@@ -14,13 +16,23 @@ struct Robot {
 }
 
 impl Direction {
-    fn string(&self) -> String {
+    fn from_string(d: String) -> Direction {
+        match d {
+            "NORTH" => North,
+            "EAST" => East,
+            "SOUTH" => South,
+            "WEST" => West,
+            _ => Unplaced,
+        }
+    }
+
+    fn to_string(&self) -> String {
         let s = match *self { 
-            Direction::North => "North",
-            Direction::East => "East",
-            Direction::South => "South",
-            Direction::West => "West",
-            _ => "Empty",
+            North => "NORTH",
+            East => "EAST",
+            South => "SOUTH",
+            West => "WEST",
+            _ => "UNPLACED",
         };
 
         s.to_string()
@@ -31,7 +43,7 @@ impl Default for Robot {
     fn default() -> Robot {
         let table = Table{w: 5, h: 5};
 
-        Robot{x: 0, y: 0, d: Direction::Empty, t: table}
+        Robot{x: 0, y: 0, d: Unplaced, t: table}
     }
 }
 
@@ -43,7 +55,7 @@ impl Table {
 
 impl Robot {
     fn place(&mut self, x: i32, y: i32, d: Direction) {
-        if self.t.valid_pos(x, y) {
+        if self.t.valid_pos(x, y) && d != Unplaced {
             self.x = x;
             self.y = y;
             self.d = d;
@@ -52,11 +64,11 @@ impl Robot {
 
     fn right(&mut self) {
         let d = match self.d {
-            Direction::North => Direction::East,
-            Direction::East => Direction::South,
-            Direction::South => Direction::West,
-            Direction::West => Direction::North,
-            _ => Direction::Empty,
+            North => East,
+            East => South,
+            South => West,
+            West => North,
+            _ => Unplaced,
         };
 
         self.d = d;
@@ -64,11 +76,11 @@ impl Robot {
 
     fn left(&mut self) {
         let d = match self.d {
-            Direction::North => Direction::West,
-            Direction::West => Direction::South,
-            Direction::South => Direction::East,
-            Direction::East => Direction::North,
-            _ => Direction::Empty,
+            North => West,
+            West => South,
+            South => East,
+            East => North,
+            _ => Unplaced,
         };
 
         self.d = d;
@@ -76,19 +88,52 @@ impl Robot {
 
     fn step(&mut self) {
         match self.d {
-            Direction::North => if self.t.valid_pos(self.x, self.y + 1) {self.y += 1;},
-            Direction::East => if self.t.valid_pos(self.x + 1, self.y) {self.x += 1;},
-            Direction::South => if self.t.valid_pos(self.x, self.y - 1) {self.y -= 1;},
-            Direction::West => if self.t.valid_pos(self.x - 1, self.y) {self.y -= 1;},
+            North => if self.t.valid_pos(self.x, self.y + 1) {self.y += 1;},
+            East => if self.t.valid_pos(self.x + 1, self.y) {self.x += 1;},
+            South => if self.t.valid_pos(self.x, self.y - 1) {self.y -= 1;},
+            West => if self.t.valid_pos(self.x - 1, self.y) {self.y -= 1;},
             _ => (),
         }
     }
 
     fn report(&self) {
-        println!("{}, {}, {}", self.x, self.y, self.d.string());
+        println!("{}, {}, {}", self.x, self.y, self.d.to_string());
     }
+}
+
+fn parse_place(args: &[&str]) -> (i32, i32, Direction) {
+    (1, 2, East)
 }
 
 fn main() {
     let mut robot: Robot = Default::default();
+    let commands = "MOVE
+                    MOVE
+                    LEFT
+                    PLACE 1,2,EAST
+                    MOVE
+                    MOVE
+                    LEFT
+                    MOVE
+                    REPORT";
+
+    let parsed: Vec<&str> = commands.split("\n").map(|c| c.trim()).collect();
+
+    for c in parsed {
+        let args: Vec<&str> = c.split(" ").collect();
+
+        if let Some(arg) = args.first() {
+            match *arg {
+                "PLACE" => {
+                    let (x, y, d) = parse_place(args.tail());
+                    robot.place(x, y, d);
+                },
+                "MOVE" => robot.step(),
+                "LEFT" => robot.left(),
+                "RIGHT" => robot.right(),
+                "REPORT" => robot.report(),
+                _ => (),
+            }
+        }
+    }
 }
