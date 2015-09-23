@@ -17,7 +17,7 @@ struct Robot {
 
 impl Direction {
     fn from_string(d: String) -> Direction {
-        match d {
+        match &d[..] {
             "NORTH" => North,
             "EAST" => East,
             "SOUTH" => South,
@@ -110,7 +110,7 @@ fn main() {
     let commands = "MOVE
                     MOVE
                     LEFT
-                    PLACE 1,2,EAST
+                    PLACE 1 2 EAST
                     MOVE
                     MOVE
                     LEFT
@@ -124,8 +124,8 @@ fn main() {
 
         if let Some(arg) = args.first() {
             match *arg {
-                "PLACE" => {
-                    let (x, y, d) = parse_place(args.tail());
+                "PLACE" if args.len() == 4 => {
+                    let (x, y, d) = parse_place(&args[1..]);
                     robot.place(x, y, d);
                 },
                 "MOVE" => robot.step(),
