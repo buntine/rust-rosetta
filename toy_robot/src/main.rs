@@ -16,13 +16,13 @@ struct Robot {
 }
 
 impl Direction {
-    fn from_string(d: String) -> Direction {
-        match &d[..] {
-            "NORTH" => North,
-            "EAST" => East,
-            "SOUTH" => South,
-            "WEST" => West,
-            _ => Unplaced,
+    fn from_string(d: &str) -> Option<Direction> {
+        match d {
+            "NORTH" => Some(North),
+            "EAST" => Some(East),
+            "SOUTH" => Some(South),
+            "WEST" => Some(West),
+            _ => None,
         }
     }
 
@@ -102,13 +102,21 @@ impl Robot {
 }
 
 fn parse_place(args: &[&str]) -> (i32, i32, Direction) {
-    (1, 2, East)
+    // TODO: Implement trait for str with first_char():
+    //*args[0].first_char().expect("Invalid X pos");
+    let (x, y, d) = (*args[0].chars().collect::<Vec<char>>().first().expect("Invalid place"),
+                     *args[1].chars().collect::<Vec<char>>().first().expect("Invalid place"),
+                     Direction::from_string(args[2]));
+
+    match (x.to_digit(10), y.to_digit(10), d) {
+        (Some(xpos), Some(ypos), Some(dir)) => (xpos as i32, ypos as i32, dir),
+        _ => (0, 0, Unplaced),
+    }
 }
 
 fn main() {
     let mut robot: Robot = Default::default();
     let commands = "MOVE
-                    MOVE
                     LEFT
                     PLACE 1 2 EAST
                     MOVE
