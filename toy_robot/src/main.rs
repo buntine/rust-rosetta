@@ -15,6 +15,21 @@ struct Robot {
     t: Table,
 }
 
+trait FirstChar {
+    fn first_char(&self) -> Option<char>;
+}
+
+impl FirstChar for str {
+    fn first_char(&self) -> Option<char> {
+        let chars = self.chars().collect::<Vec<char>>();
+        
+        match chars.first() {
+            Some(c) => Some(*c),
+            _ => None,
+        }
+    }
+}
+
 impl Direction {
     fn from_string(d: &str) -> Option<Direction> {
         match d {
@@ -102,10 +117,8 @@ impl Robot {
 }
 
 fn parse_place(args: &[&str]) -> (i32, i32, Direction) {
-    // TODO: Implement trait for str with first_char():
-    //*args[0].first_char().expect("Invalid X pos");
-    let (x, y, d) = (*args[0].chars().collect::<Vec<char>>().first().expect("Invalid place"),
-                     *args[1].chars().collect::<Vec<char>>().first().expect("Invalid place"),
+    let (x, y, d) = (args[0].first_char().expect("Invalid place"),
+                     args[1].first_char().expect("Invalid place"),
                      Direction::from_string(args[2]));
 
     match (x.to_digit(10), y.to_digit(10), d) {
