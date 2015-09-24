@@ -16,16 +16,14 @@ struct Robot {
 }
 
 trait FirstChar {
-    fn first_char(&self) -> Option<char>;
+    fn first_char_or(&self, default: char) -> char;
 }
 
 impl FirstChar for str {
-    fn first_char(&self) -> Option<char> {
-        let chars = self.chars().collect::<Vec<char>>();
-        
-        match chars.first() {
-            Some(c) => Some(*c),
-            _ => None,
+    fn first_char_or(&self, default: char) -> char {
+        match self.chars().nth(0) {
+            Some(c) => c,
+            None => default,
         }
     }
 }
@@ -117,8 +115,8 @@ impl Robot {
 }
 
 fn parse_place(args: &[&str]) -> (i32, i32, Direction) {
-    let (x, y, d) = (args[0].first_char().expect("Invalid place"),
-                     args[1].first_char().expect("Invalid place"),
+    let (x, y, d) = (args[0].first_char_or('0'),
+                     args[1].first_char_or('0'),
                      Direction::from_string(args[2]));
 
     match (x.to_digit(10), y.to_digit(10), d) {
