@@ -15,6 +15,13 @@ struct App {
 
 impl App {
     fn render(&mut self, args: &RenderArgs) {
+        use graphics::*;
+
+        const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
+
+        self.gl.draw(args.viewport(), |c, gl| {
+            clear(WHITE, gl);
+        });
     }
 }
 
@@ -23,7 +30,7 @@ fn main() {
 
     let window: Window = WindowSettings::new(
         "Sierpinski-Triangle",
-        [800, 600])
+        [1000, 800])
         .opengl(opengl)
         .exit_on_esc(true)
         .build()
