@@ -2,3 +2,9 @@
 name = "sierpinski_triangle"
 version = "0.1.0"
 authors = ["Andrew Buntine Of Doom <bunts@hhd.com.au>"]
+
+[dependencies]
+piston = "0.10.1"
+piston2d-graphics = "0.9.0"
+pistoncore-glutin_window = "0.12.0"
+piston2d-opengl_graphics = "0.12.0"
