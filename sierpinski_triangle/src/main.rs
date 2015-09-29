@@ -18,9 +18,17 @@ impl App {
         use graphics::*;
 
         const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
+        const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
+
+        let triangle = [[100.0, 200.0], [200.0, 200.0],
+                        [150.0, 100.0], [100.0, 200.0]];
 
         self.gl.draw(args.viewport(), |c, gl| {
             clear(WHITE, gl);
+
+            let transform = c.transform.trans(100.0, 100.0);
+
+            polygon(BLACK, &triangle, transform, gl);
         });
     }
 }
