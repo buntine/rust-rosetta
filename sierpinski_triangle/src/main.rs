@@ -35,6 +35,31 @@ impl App {
     }
 }
 
+fn sierpinski(depth: i32, vertices: [[f64; 2]; 4]) -> Vec<[[f64; 2]; 4]> {
+    let mut triangles = vec![];
+
+    match depth {
+        0 => triangles,
+        d @ _ => {
+            // TODO: Break into four triangles. Push first. And then recurse on the rest.
+            triangles.push([[100.0, 200.0], [200.0, 200.0],
+                            [150.0, 100.0], [100.0, 200.0]]);
+
+            for t in sierpinski(d - 1, [[100.0, 200.0], [200.0, 200.0], [150.0, 100.0], [100.0, 200.0]]) {
+                triangles.push(t);
+            }
+            for t in sierpinski(d - 1, [[100.0, 200.0], [200.0, 200.0], [150.0, 100.0], [100.0, 200.0]]) {
+                triangles.push(t);
+            }
+            for t in sierpinski(d - 1, [[100.0, 200.0], [200.0, 200.0], [150.0, 100.0], [100.0, 200.0]]) {
+                triangles.push(t);
+            }
+
+            triangles
+        },
+    }
+}
+
 fn main() {
     let opengl = OpenGL::V3_2;
 
@@ -46,14 +71,12 @@ fn main() {
         .build()
         .unwrap();
 
-    let triangles = vec![[[100.0, 200.0], [200.0, 200.0],
-                          [150.0, 100.0], [100.0, 200.0]],
-                          [[250.0, 200.0], [350.0, 200.0],
-                          [300.0, 100.0], [250.0, 200.0]]];
+    let triangles = sierpinski(4, [[100.0, 200.0], [200.0, 200.0],
+                                   [150.0, 100.0], [100.0, 200.0]]);
 
     let mut app = App{gl: GlGraphics::new(opengl), triangles: triangles};
 
-    for e in window.events() {
+    for e in window.events().max_fps(1) {
         if let Some(r) = e.render_args() {
             app.render(&r);
         }
