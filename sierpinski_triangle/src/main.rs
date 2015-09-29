@@ -11,6 +11,7 @@ use opengl_graphics::{ GlGraphics, OpenGL };
 
 struct App {
     gl: GlGraphics,
+    triangles: Vec<[[f64; 2]; 4]>
 }
 
 impl App {
@@ -20,15 +21,16 @@ impl App {
         const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
         const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
 
-        let triangle = [[100.0, 200.0], [200.0, 200.0],
-                        [150.0, 100.0], [100.0, 200.0]];
+        let triangles = &self.triangles;
 
         self.gl.draw(args.viewport(), |c, gl| {
             clear(WHITE, gl);
 
-            let transform = c.transform.trans(100.0, 100.0);
+            let transform = c.transform.trans(0.0, 0.0);
 
-            polygon(BLACK, &triangle, transform, gl);
+            for t in triangles {
+              polygon(BLACK, t, transform, gl);
+            }
         });
     }
 }
@@ -44,7 +46,12 @@ fn main() {
         .build()
         .unwrap();
 
-    let mut app = App{gl: GlGraphics::new(opengl)};
+    let triangles = vec![[[100.0, 200.0], [200.0, 200.0],
+                          [150.0, 100.0], [100.0, 200.0]],
+                          [[250.0, 200.0], [350.0, 200.0],
+                          [300.0, 100.0], [250.0, 200.0]]];
+
+    let mut app = App{gl: GlGraphics::new(opengl), triangles: triangles};
 
     for e in window.events() {
         if let Some(r) = e.render_args() {
