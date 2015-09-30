@@ -11,7 +11,8 @@ use opengl_graphics::{ GlGraphics, OpenGL };
 
 struct App {
     gl: GlGraphics,
-    triangles: Vec<[[f64; 2]; 3]>
+    triangles: Vec<[[f64; 2]; 3]>,
+    index: usize,
 }
 
 impl App {
@@ -21,17 +22,26 @@ impl App {
         const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
         const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
 
-        let triangles = &self.triangles;
+        let i = self.index;
+        let triangle = self.triangles[i];
 
         self.gl.draw(args.viewport(), |c, gl| {
-            clear(WHITE, gl);
+            if i == 0 {
+                clear(WHITE, gl);
+            }
 
             let transform = c.transform.trans(0.0, 0.0);
 
-            for t in triangles {
-              polygon(BLACK, t, transform, gl);
-            }
+            polygon(BLACK, &triangle, transform, gl);
         });
+    }
+
+    fn update(&mut self, args: &UpdateArgs) {
+        if (self.index as i32) + 1 >= self.triangles.len() as i32 {
+            self.index = 0
+        } else {
+            self.index += 1;
+        }
     }
 }
 
@@ -83,11 +93,16 @@ fn main() {
         .unwrap();
 
     let triangles = sierpinski(8, [[50.0, 750.0], [950.0, 750.0], [500.0, 50.0]]);
-    let mut app = App{gl: GlGraphics::new(opengl), triangles: triangles};
+    let mut app = App{gl: GlGraphics::new(opengl), triangles: triangles, index: 0};
 
-    for e in window.events().max_fps(1) {
+    for e in window.events().max_fps(60).ups(60) {
         if let Some(r) = e.render_args() {
             app.render(&r);
         }
+
+        if let Some(u) = e.update_args() {
+            app.update(&u);
+        }
+
     }
 }
