@@ -11,7 +11,7 @@ use opengl_graphics::{ GlGraphics, OpenGL };
 
 struct App {
     gl: GlGraphics,
-    triangles: Vec<[[f64; 2]; 4]>
+    triangles: Vec<[[f64; 2]; 3]>
 }
 
 impl App {
@@ -35,8 +35,8 @@ impl App {
     }
 }
 
-fn sub_triangles(v: [[f64; 2]; 4]) -> Vec<[[f64; 2]; 4]> {
-    let (a, b, c, d) = (v[0], v[1], v[2], v[3]); // Vector destructuring is not yet stable.
+fn sub_triangles(v: [[f64; 2]; 3]) -> Vec<[[f64; 2]; 3]> {
+    let (a, b, c) = (v[0], v[1], v[2]); // Vector destructuring is not yet stable in Rust 1.3.0.
     let (sax, say, sbx, sby, scx, scy) = (
             a[0] + ((b[0] - a[0]) / 2.0),
             a[1],
@@ -45,26 +45,13 @@ fn sub_triangles(v: [[f64; 2]; 4]) -> Vec<[[f64; 2]; 4]> {
             a[0] + ((c[0] - a[0]) / 2.0),
             a[1] - ((a[1] - c[1]) / 2.0));
 
-    vec![
-        [[sax, say],
-         [sbx, sby],
-         [scx, scy],
-         [sax, say]],
-        [[a[0], a[1]],
-         [sax, say],
-         [scx, scy],
-         [a[0], a[1]]],
-        [[sax, say],
-         [b[0], b[1]],
-         [sbx, sby],
-         [sax, say]],
-        [[scx, scy],
-         [sbx, sby],
-         [c[0], c[1]],
-         [scx, scy]]]
+    vec![[[sax, say], [sbx, sby], [scx, scy]],
+         [[a[0], a[1]], [sax, say], [scx, scy]],
+         [[sax, say], [b[0], b[1]], [sbx, sby]],
+         [[scx, scy], [sbx, sby], [c[0], c[1]]]]
 }
 
-fn sierpinski(depth: i32, vertices: [[f64; 2]; 4]) -> Vec<[[f64; 2]; 4]> {
+fn sierpinski(depth: i32, vertices: [[f64; 2]; 3]) -> Vec<[[f64; 2]; 3]> {
     let mut triangles = vec![];
 
     match depth {
@@ -87,7 +74,6 @@ fn sierpinski(depth: i32, vertices: [[f64; 2]; 4]) -> Vec<[[f64; 2]; 4]> {
 
 fn main() {
     let opengl = OpenGL::V3_2;
-
     let window: Window = WindowSettings::new(
         "Sierpinski-Triangle",
         [1000, 800])
@@ -96,9 +82,7 @@ fn main() {
         .build()
         .unwrap();
 
-    let triangles = sierpinski(8, [[50.0, 750.0], [950.0, 750.0],
-                                   [500.0, 50.0], [50.0, 750.0]]);
-
+    let triangles = sierpinski(8, [[50.0, 750.0], [950.0, 750.0], [500.0, 50.0]]);
     let mut app = App{gl: GlGraphics::new(opengl), triangles: triangles};
 
     for e in window.events().max_fps(1) {
