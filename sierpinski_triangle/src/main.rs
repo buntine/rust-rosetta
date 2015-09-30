@@ -35,7 +35,7 @@ impl App {
     }
 }
 
-fn sub_triangles(v: [[f64; 2]; 3]) -> Vec<[[f64; 2]; 3]> {
+fn sub_triangles(v: &[[f64; 2]; 3]) -> [[[f64; 2]; 3]; 4] {
     let (a, b, c) = (v[0], v[1], v[2]); // Vector destructuring is not yet stable in Rust 1.3.0.
     let (sax, say, sbx, sby, scx, scy) = (
             a[0] + ((b[0] - a[0]) / 2.0),
@@ -45,10 +45,10 @@ fn sub_triangles(v: [[f64; 2]; 3]) -> Vec<[[f64; 2]; 3]> {
             a[0] + ((c[0] - a[0]) / 2.0),
             a[1] - ((a[1] - c[1]) / 2.0));
 
-    vec![[[sax, say], [sbx, sby], [scx, scy]],
-         [[a[0], a[1]], [sax, say], [scx, scy]],
-         [[sax, say], [b[0], b[1]], [sbx, sby]],
-         [[scx, scy], [sbx, sby], [c[0], c[1]]]]
+    [[[sax, say], [sbx, sby], [scx, scy]],
+     [[a[0], a[1]], [sax, say], [scx, scy]],
+     [[sax, say], [b[0], b[1]], [sbx, sby]],
+     [[scx, scy], [sbx, sby], [c[0], c[1]]]]
 }
 
 fn sierpinski(depth: i32, vertices: [[f64; 2]; 3]) -> Vec<[[f64; 2]; 3]> {
@@ -56,8 +56,8 @@ fn sierpinski(depth: i32, vertices: [[f64; 2]; 3]) -> Vec<[[f64; 2]; 3]> {
 
     match depth {
         0 => triangles,
-        d @ _ => {
-            let sub_tris = sub_triangles(vertices);
+        d => {
+            let sub_tris = sub_triangles(&vertices);
 
             triangles.push(sub_tris[0]);
 
