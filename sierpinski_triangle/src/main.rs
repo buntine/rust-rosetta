@@ -63,18 +63,18 @@ fn sub_triangles(v: &Triangle) -> [Triangle; 4] {
      [[scx, scy], [sbx, sby], [c[0], c[1]]]]
 }
 
-fn sierpinski(depth: i32, vertices: Triangle) -> Vec<Triangle> {
+fn sierpinski(depth: i32, vertices: &Triangle) -> Vec<Triangle> {
     let mut triangles = vec![];
 
     match depth {
         0 => triangles,
         d => {
-            let sub_tris = sub_triangles(&vertices);
+            let sub_tris = sub_triangles(vertices);
 
             triangles.push(sub_tris[0]);
 
             for sub_tri in &sub_tris[1..] {
-                for t in sierpinski(d - 1, *sub_tri) {
+                for t in sierpinski(d - 1, sub_tri) {
                     triangles.push(t);
                 }
             }
@@ -95,7 +95,7 @@ fn main() {
         .build()
         .unwrap();
 
-    let triangles = sierpinski(8, [[50.0, 750.0], [950.0, 750.0], [500.0, 50.0]]);
+    let triangles = sierpinski(8, &[[50.0, 750.0], [950.0, 750.0], [500.0, 50.0]]);
     let mut app = App{gl: GlGraphics::new(opengl), triangles: triangles, index: 0};
 
     for e in window.events().max_fps(FPS).ups(FPS) {
