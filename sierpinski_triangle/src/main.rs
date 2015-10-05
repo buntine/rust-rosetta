@@ -38,7 +38,7 @@ impl App {
         });
     }
 
-    fn update(&mut self, args: &UpdateArgs) {
+    fn update(&mut self, _args: &UpdateArgs) {
         if (self.index as i32) + 1 >= self.triangles.len() as i32 {
             self.index = 0
         } else {
