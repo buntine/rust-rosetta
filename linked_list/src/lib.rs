@@ -13,9 +13,14 @@ impl<T> LinkedList<T> {
     pub fn new(value: T) -> LinkedList<T> {
         LinkedList{head: Link{value: value, next: None}}
     }
+
+    pub fn insert(&self, value: T) -> LinkedList<T> {
+        let h = self.head;
+        LinkedList{head: Link{value: value, next: Some(Box::new(h))}}
+    }
 }
 
 #[test]
 fn it_works() {
-    let ll = LinkedList::new();
+    let ll = LinkedList::new(1);
 }
