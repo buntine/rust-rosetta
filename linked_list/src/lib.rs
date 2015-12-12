@@ -6,21 +6,27 @@ struct Link<T> {
 }
 
 struct LinkedList<T> {
-    head: Link<T>,
+    head: Option<Link<T>>,
 }
 
 impl<T> LinkedList<T> {
-    pub fn new(value: T) -> LinkedList<T> {
-        LinkedList{head: Link{value: value, next: None}}
+    pub fn new() -> LinkedList<T> {
+        LinkedList{head: None}
     }
 
-    pub fn insert(&self, value: T) -> LinkedList<T> {
-        let h = self.head;
-        LinkedList{head: Link{value: value, next: Some(Box::new(h))}}
+    pub fn insert(&mut self, value: T) -> LinkedList<T> {
+        let h = match self.head.take() {
+            Some(n) => Some(Link{value: value, next: Some(Box::new(n))}),
+            None => None,
+        };
+
+        LinkedList{head: h}
     }
 }
 
 #[test]
 fn it_works() {
-    let ll = LinkedList::new(1);
+    let mut ll: LinkedList<i32> = LinkedList::new();
+    ll.insert(1);
+    ll.insert(2);
 }
