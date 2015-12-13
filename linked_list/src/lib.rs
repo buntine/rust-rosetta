@@ -34,6 +34,26 @@ impl<T> LinkedList<T> {
         }
     }
 
+    pub fn remove_at(&mut self, index: usize) {
+        match index {
+            0 => self.remove(),
+            i @ _ => {
+                // Iterate through to node of i - 1
+                // Set node.next = node.next.next in a safe way;
+            }
+        }
+    }
+
+    pub fn insert_at(&mut self, index: usize, value: T) {
+        match index {
+            0 => self.insert(value),
+            i @ _ => {
+                // Iterate through to node of i - 1
+                // Set node.next = Node(value: value, next: node.next) in a safe way;
+            }
+        }
+    }
+ 
     pub fn get(&self, index: usize) -> Option<&T> {
         match self.lookup(&self.head, index) {
             Some(ref n) => Some(&n.value),
