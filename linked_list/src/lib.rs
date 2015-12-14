@@ -1,15 +1,15 @@
 type Node<T> = Option<Box<Link<T>>>;
 
-struct Link<T> {
+struct Link<T: PartialEq> {
     value: T,
     next: Node<T>,
 }
 
-struct LinkedList<T> {
+struct LinkedList<T: PartialEq> {
     head: Node<T>,
 }
 
-impl<T> LinkedList<T> {
+impl<T: PartialEq> LinkedList<T> {
     fn lookup<'a>(&'a self, base: &'a Node<T>, offset: usize) -> Option<&Box<Link<T>>> {
         match *base {
             Some(ref n) if offset == 0 => Some(n),
@@ -34,24 +34,10 @@ impl<T> LinkedList<T> {
         }
     }
 
-    pub fn remove_at(&mut self, index: usize) {
-        match index {
-            0 => self.remove(),
-            i @ _ => {
-                // Iterate through to node of i - 1
-                // Set node.next = node.next.next in a safe way;
-            }
-        }
+    pub fn remove_after(&mut self, find: T) {
     }
 
-    pub fn insert_at(&mut self, index: usize, value: T) {
-        match index {
-            0 => self.insert(value),
-            i @ _ => {
-                // Iterate through to node of i - 1
-                // Set node.next = Node(value: value, next: node.next) in a safe way;
-            }
-        }
+    pub fn insert_after(&mut self, find: T, value: T) {
     }
  
     pub fn get(&self, index: usize) -> Option<&T> {
