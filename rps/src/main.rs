@@ -88,7 +88,7 @@ fn main() {
        io::stdin()
            .read_line(&mut input)
            .ok()
-           .expect("Cuold not read input.");
+           .expect("Could not read input.");
 
        let human = match input.trim() {
            "r" => Move::Rock,
