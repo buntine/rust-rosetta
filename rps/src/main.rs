@@ -1,4 +1,7 @@
+extern crate rand;
+
 use std::io;
+use rand::Rng;
 
 #[derive(Eq, PartialEq)]
 enum Move {
@@ -42,7 +45,11 @@ impl Game {
     }
 
     fn pick(&self) -> Move {
-        Move::Paper
+        match rand::thread_rng().gen_range(0, 3) {
+            0 => Move::Rock,
+            1 => Move::Paper,
+            _ => Move::Scissors,
+        }
     }
 
     fn play(&mut self, human: &Move) -> GameResult {
