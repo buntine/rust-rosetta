@@ -44,10 +44,8 @@ impl Game {
     }
 
     fn increment_frequency(&mut self, m: &Move) {
-        match Move::variants().position(|n| n == m) {
-            Some(i) => { self.frequencies[i] += 1 },
-            None => { panic!("Unknown frequency.") },
-        }
+        let i = Move::variants().position(|n| n == m).expect("Unknown frequency.");
+        self.frequencies[i] += 1;
     }
 
     fn pick(&self) -> Move {
