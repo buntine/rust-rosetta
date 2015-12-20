@@ -64,11 +64,10 @@ impl Game {
 
     fn play(&mut self, human: &Move) -> GameResult {
         let computer = self.pick();
-        let best_answer = human.beaten_by();
 
-        self.increment_frequency(&best_answer);
+        self.increment_frequency(&human);
 
-        if best_answer == computer {
+        if human.beaten_by() == computer {
             GameResult::Computer
         } else if computer.beaten_by() == *human {
             GameResult::Human
