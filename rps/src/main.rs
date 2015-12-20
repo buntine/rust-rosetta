@@ -18,7 +18,7 @@ enum GameResult {
 }
 
 struct Game {
-    frequencies: (u32, u32, u32),
+    frequencies: [u32; 3],
 }
 
 impl Move {
@@ -33,23 +33,33 @@ impl Move {
 
 impl Game {
     fn new() -> Game {
-        Game{frequencies: (0, 0, 0)}
+        Game{frequencies: [0, 0, 0]}
     }
 
     fn increment_frequency(&mut self, m: &Move) {
-        match *m {
-            Move::Rock => { self.frequencies.0 += 1; },
-            Move::Paper => { self.frequencies.1 += 1; },
-            Move::Scissors => { self.frequencies.2 += 1; },
+        let i = match *m {
+            Move::Rock => 0,
+            Move::Paper => 1,
+            Move::Scissors => 2,
         };
+
+        self.frequencies[i] += 1;
     }
 
     fn pick(&self) -> Move {
-        match rand::thread_rng().gen_range(0, 3) {
-            0 => Move::Rock,
-            1 => Move::Paper,
-            _ => Move::Scissors,
+        let total = self.frequencies.iter().fold(0, |t, n| t + n);
+        let guess = rand::thread_rng().gen_range(0, total + 1);
+        let mut sum: u32 = 0;
+         
+        for (&f, c) in self.frequencies.iter().zip([Move::Rock, Move::Paper, Move::Scissors].iter()) {
+            sum += f;
+
+            if guess <= sum {
+                return c.beaten_by();
+            }
         }
+
+        return Move::Rock;
     }
 
     fn play(&mut self, human: &Move) -> GameResult {
