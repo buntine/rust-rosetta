@@ -1,3 +1,5 @@
+use std::io;
+
 #[derive(Eq, PartialEq)]
 enum Move {
     Rock,
@@ -38,15 +40,19 @@ impl Game {
         };
     }
 
-    fn play(&mut self, human: Move) -> GameResult {
-        let computer = Move::Paper;
+    fn pick(&self) -> Move {
+        Move::Paper
+    }
+
+    fn play(&mut self, human: &Move) -> GameResult {
+        let computer = self.pick();
         let best_answer = human.beaten_by();
 
         self.increment_frequency(&best_answer);
 
         if best_answer == computer {
             GameResult::Computer
-        } else if computer.beaten_by() == human {
+        } else if computer.beaten_by() == *human {
             GameResult::Human
         } else {
             GameResult::Draw
@@ -57,11 +63,29 @@ impl Game {
 fn main() {
    let mut game = Game::new();
 
-   let result = match game.play(Move::Paper) {
-       GameResult::Human => "Human wins!",
-       GameResult::Computer => "Computer wins!",
-       GameResult::Draw => "Draw!",
-   };
+   loop {
+       println!("Enter a guess (r, p, s);");
 
-   println!("{}", result);
+       let mut input = String::new();
+
+       io::stdin()
+           .read_line(&mut input)
+           .ok()
+           .expect("Cuold not read input.");
+
+       let human = match input.trim() {
+           "r" => Move::Rock,
+           "p" => Move::Paper,
+           "s" => Move::Scissors,
+           _ => { continue; },
+       };
+
+       let result = match game.play(&human) {
+           GameResult::Human => "Human wins!",
+           GameResult::Computer => "Computer wins!",
+           GameResult::Draw => "Draw!",
+       };
+
+       println!("{}", result);
+   }
 }
