@@ -33,7 +33,6 @@ impl Move {
 
     fn variants() -> slice::Iter<'static, Move> {
         static VARIANTS: &'static [Move] = &[Move::Rock, Move::Paper, Move::Scissors];
-
         VARIANTS.iter()
     }
 }
@@ -83,7 +82,7 @@ fn main() {
    let mut game = Game::new();
 
    loop {
-       println!("Enter a guess (r, p, s);");
+       println!("Enter a guess (r, p, s): ");
 
        let mut input = String::new();
 
