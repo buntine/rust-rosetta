@@ -7,6 +7,7 @@ enum Move {
     Scissors,
 }
 
+#[derive(Debug)]
 enum GameResult {
     Human,
     Computer,
@@ -80,12 +81,6 @@ fn main() {
            _ => { continue; },
        };
 
-       let result = match game.play(&human) {
-           GameResult::Human => "Human wins!",
-           GameResult::Computer => "Computer wins!",
-           GameResult::Draw => "Draw!",
-       };
-
-       println!("{}", result);
+       println!("Winner: {:?}", game.play(&human));
    }
 }
