@@ -1,6 +1,7 @@
 extern crate rand;
 
 use std::io;
+use std::slice;
 use rand::Rng;
 
 #[derive(Eq, PartialEq)]
@@ -29,6 +30,12 @@ impl Move {
             Move::Scissors => Move::Rock,
         }
     }
+
+    fn variants() -> slice::Iter<'static, Move> {
+        static VARIANTS: &'static [Move] = &[Move::Rock, Move::Paper, Move::Scissors];
+
+        VARIANTS.iter()
+    }
 }
 
 impl Game {
@@ -37,13 +44,10 @@ impl Game {
     }
 
     fn increment_frequency(&mut self, m: &Move) {
-        let i = match *m {
-            Move::Rock => 0,
-            Move::Paper => 1,
-            Move::Scissors => 2,
-        };
-
-        self.frequencies[i] += 1;
+        match Move::variants().position(|n| n == m) {
+            Some(i) => { self.frequencies[i] += 1 },
+            None => { panic!("Unknown frequency.") },
+        }
     }
 
     fn pick(&self) -> Move {
@@ -51,7 +55,7 @@ impl Game {
         let guess = rand::thread_rng().gen_range(0, total + 1);
         let mut sum: u32 = 0;
          
-        for (&f, c) in self.frequencies.iter().zip([Move::Rock, Move::Paper, Move::Scissors].iter()) {
+        for (&f, c) in self.frequencies.iter().zip(Move::variants()) {
             sum += f;
 
             if guess <= sum {
