@@ -37,4 +37,7 @@ fn it_works() {
 //   The emphasis here is on safety, not expressiveness.
 // - Question: Why can't Rust ensure/infer/elide this scenario? Surely any reference to a Parent
 //   must *always* live for the same or a bigger scope???
-// - 
+//   - There is an open RFC for this
+//   - It may be complex to implement and/or slow down compilation
+//   - Eliding in more cases may prevent newcomer Rust programmers from ever encountering
+//     lifetimes, which could have a negative impact in the long run. Pedagogy!
