@@ -1,14 +1,14 @@
 struct Person<'a> {
-    name: &'a str,
+    name: &'static str,
     parent: Option<&'a Person<'a>>,
 }
 
 impl<'a> Person<'a> {
-    fn new(name: &'a str, parent: Option<&'a Person<'a>>) -> Person<'a> {
+    fn new(name: &'static str, parent: Option<&'a Person<'a>>) -> Person<'a> {
         Person{name: name, parent: parent}
     }
 
-    fn parents_name(&self) -> Option<&'a str> {
+    fn parents_name(&self) -> Option<&'static str> {
         match self.parent {
             Some(p) => Some(p.name),
             None => None,
