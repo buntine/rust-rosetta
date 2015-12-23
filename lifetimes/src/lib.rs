@@ -16,10 +16,17 @@ impl<'a> Person<'a> {
     }
 }
 
+fn first_five<'a>(value: &'a String) -> &'a str {
+    &value[..5]
+}
+
 #[test]
 fn it_works() {
     let jane = Person::new("Jane", None);
     let tom = Person::new("Tom", Some(&jane));
+    let name = "Andrew".to_owned();
+
+    assert_eq!(first_five(&name), "Andre");
 
     assert_eq!(tom.name, "Tom");
     assert_eq!(jane.name, "Jane");
