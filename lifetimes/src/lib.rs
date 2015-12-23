@@ -27,10 +27,10 @@ fn first_five<'a>(value: &'a String) -> &'a str {
 // Here we are promising Rust that all of the borrowed u8's
 // live for the same scope.
 // Q: Why do I need a lifetime here?
-fn join_iters<'a, T: Iterator>(vecs: T) -> Vec<&'a Age>
+fn join_ages<'a, T: Iterator>(iters: T) -> Vec<&'a Age>
         where T::Item: IntoIterator<Item=&'a Age> {
-    vecs.flat_map(|b| b.into_iter())
-        .collect()
+    iters.flat_map(|b| b.into_iter())
+         .collect()
 }
 
 #[test]
@@ -39,8 +39,11 @@ fn it_works() {
     let tom = Person::new("Tom", Some(&jane));
     let name = "Andrew".to_owned();
     let a = 43;
-    let ints = vec![vec![Age(90), Age(80)],
-                    vec![Age(2)]];
+    let vec_ages = vec![vec![Age(90), Age(80)],
+                        vec![Age(2)]];
+
+    let arr_ages = vec![[Age(90), Age(80)],
+                        [Age(2), Age(45)]];
 
     assert_eq!(first_five(&name), "Andre");
 
@@ -50,7 +53,8 @@ fn it_works() {
     assert_eq!(tom.parents_name(), Some("Jane"));
     assert_eq!(jane.parents_name(), None);
 
-    assert_eq!(join_iters(ints.iter()), vec![&Age(90), &Age(80), &Age(2)]);
+    assert_eq!(join_ages(vec_ages.iter()), vec![&Age(90), &Age(80), &Age(2)]);
+    assert_eq!(join_ages(arr_ages.iter()), vec![&Age(90), &Age(80), &Age(2), &Age(45)]);
 }
 
 // - We are making a promise to the compiler that all of these things live for atleast the same scope.
