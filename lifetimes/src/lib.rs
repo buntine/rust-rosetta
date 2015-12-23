@@ -16,8 +16,17 @@ impl<'a> Person<'a> {
     }
 }
 
+// This one can be elided.
 fn first_five<'a>(value: &'a String) -> &'a str {
     &value[..5]
+}
+
+// Q: Why do I need a lifetime here?
+pub fn join_iters<'a, T: Iterator>(vecs: T) -> Vec<u8>
+        where T::Item: IntoIterator<Item=&'a u8> {
+    vecs.flat_map(|b| b.into_iter())
+        .cloned()
+        .collect()
 }
 
 #[test]
@@ -26,6 +35,10 @@ fn it_works() {
     let tom = Person::new("Tom", Some(&jane));
     let name = "Andrew".to_owned();
 
+    let ints = vec![vec![78, 43, 1],
+                    vec![1, 45, 66, 2],
+                    vec![99, 8, 20]];
+
     assert_eq!(first_five(&name), "Andre");
 
     assert_eq!(tom.name, "Tom");
@@ -33,6 +46,8 @@ fn it_works() {
     assert_eq!(tom.parent.unwrap().name, "Jane");
     assert_eq!(tom.parents_name(), Some("Jane"));
     assert_eq!(jane.parents_name(), None);
+
+    assert_eq!(join_iters(ints.iter()), vec![78, 43, 1, 1, 45, 66, 2, 99, 8, 20]);
 }
 
 // - We are making a promise to the compiler that all of these things live for atleast the same scope.
