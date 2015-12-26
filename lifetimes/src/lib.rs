@@ -24,6 +24,11 @@ fn first_five<'a>(value: &'a String) -> &'a str {
     &value[..5]
 }
 
+// This cannot be elided because Rust doesn't know to use lifetime of "a" or "b".
+fn double_first_five<'a>(a: &'a String, b: &'a String) -> (&'a str, &'a str) {
+    (&a[..5], &b[..5])
+}
+
 // Here we are promising Rust that all of the borrowed u8's
 // live for the same scope.
 // Q: Why do I need a lifetime here?
@@ -38,6 +43,7 @@ fn it_works() {
     let jane = Person::new("Jane", None);
     let tom = Person::new("Tom", Some(&jane));
     let name = "Andrew".to_owned();
+    let another = "Timothy".to_owned();
     let a = 43;
     let vec_ages = vec![vec![Age(90), Age(80)],
                         vec![Age(2)]];
@@ -46,6 +52,7 @@ fn it_works() {
                         [Age(2), Age(45)]];
 
     assert_eq!(first_five(&name), "Andre");
+    assert_eq!(double_first_five(&name, &another), ("Andre", "Timot"));
 
     assert_eq!(tom.name, "Tom");
     assert_eq!(jane.name, "Jane");
