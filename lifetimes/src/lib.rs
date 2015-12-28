@@ -83,7 +83,12 @@ fn it_works() {
     //let bob = Person::new("Bob", Some(&Person::new("Rob", None)));
 
     // If we swap these two lines around then this will not compile because the lifetime of Mary
-    // would be less than that of Bob.
+    // would be less than that of Bob. The definition of the "new" method above states that both
+    // Person and their optional parent (&Person) must have the same lifetime). This is kind of
+    // unfortunate because, as Humans, we know that this code is safe, but Rust is being strict on
+    // us in this situation because when many and bob are deallocated at the end of their scope,
+    // there will be a brief instant where bob is borrowing mary even though she's been
+    // deallocated.
     let mary = Person::new("Mary", None);
     let mut bob = Person::new("Bob", None);
 
