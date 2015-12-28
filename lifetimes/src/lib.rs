@@ -50,6 +50,9 @@ fn join_ages<'a, T: Iterator>(iters: T) -> Vec<&'a Age>
          .collect()
 }
 
+// This is not really necessary here. Both a and b could use the same lifetime
+// as Rust only cares that a and b are available for the scope of this function.
+// This could also be elided.
 fn multi_lifetimes<'a, 'b>(a: &'a u8, b: &'b u8) -> bool {
     (a + b) > 10
 }
