@@ -77,6 +77,18 @@ fn it_works() {
     let vec_ages = vec![vec![Age(90), Age(80)],
                         vec![Age(2)]];
 
+    // Error: This cannot work because the lifetime of the borrow (Rob) is only valid for
+    // the expression on the right-hand side. We must increase it's lifetime by giving it a name
+    // via 'let'.
+    //let bob = Person::new("Bob", Some(&Person::new("Rob", None)));
+
+    // If we swap these two lines around then this will not compile because the lifetime of Mary
+    // would be less than that of Bob.
+    let mary = Person::new("Mary", None);
+    let mut bob = Person::new("Bob", None);
+
+    bob.parent = Some(&mary);
+
     let arr_ages = vec![[Age(90), Age(80)],
                         [Age(2), Age(45)]];
 
