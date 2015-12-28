@@ -31,6 +31,9 @@ fn double_first_five<'a>(a: &'a String, b: &'a String) -> (&'a str, &'a str) {
 
 // Output borrows generally must have an input value from which it can borrow. The exception is
 // the static lifetime.
+// Couldn't Rust infer from the body of the function that the borrows are from the static lifetime?
+//   - I feel that Rust favours explicitness over terseness. A functions behaviour should be
+//   encoded directly into it's signature.
 fn output_only<'a>() -> (&'static u8, &'static u8) {
     static X: u8 = 8;
     static Y: u8 = 9;
@@ -45,6 +48,20 @@ fn join_ages<'a, T: Iterator>(iters: T) -> Vec<&'a Age>
         where T::Item: IntoIterator<Item=&'a Age> {
     iters.flat_map(|b| b.into_iter())
          .collect()
+}
+
+fn multi_lifetimes<'a, 'b>(a: &'a u8, b: &'b u8) -> bool {
+    (a + b) > 10
+}
+
+fn multiple_lifetimes() -> bool {
+    let a = &9;
+
+    {
+        let b = &9;
+
+        multi_lifetimes(a, b)
+    }
 }
 
 #[test]
@@ -65,6 +82,8 @@ fn it_works() {
     assert_eq!(first_five(&name), "Andre");
     assert_eq!(double_first_five(&name, &another), ("Andre", "Timot"));
 
+    assert!(multiple_lifetimes());
+
     assert_eq!(tom.name, "Tom");
     assert_eq!(jane.name, "Jane");
     assert_eq!(tom.parent.unwrap().name, "Jane");
@@ -78,6 +97,7 @@ fn it_works() {
 // - We are making a promise to the compiler that all of these things live for atleast the same scope.
 // - We are not asking the compiler to "create a lifetime". We are just telling it to complain if we
 //   don't do what we say we are doing.
+// - Nor are you telling Rust to "allow" a binding to be available in a given named scope/lifetime.
 // - Why? Because this allows Rust to ensure we cannot cause common memory allocation bugs. It does
 //   this at compile time. It's a zero-cost abstraction because there is no runtime penalty.
 // - It makes code look "uglier". But this is the wrong mindset for writing systems-level programs.
