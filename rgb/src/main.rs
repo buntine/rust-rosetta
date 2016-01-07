@@ -11,7 +11,7 @@ impl Gradient {
             start: [0,0,0],
             steps: [17,17,17],
             n: 0,
-            total: 16
+            total: steps
         }
     }
 }
@@ -43,9 +43,7 @@ fn it_works() {
 }
 
 fn main() {
-  let g = Gradient::new("000000".to_string(), "ffffff".to_string(), 16);
+  let g = Gradient::new("000000".to_string(), "ffffff".to_string(), 10000);
 
-  for c in g {
-      println!("{}", c);
-  }
+  g.collect::<Vec<String>>();
 }
