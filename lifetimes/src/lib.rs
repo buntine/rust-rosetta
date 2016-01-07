@@ -12,10 +12,7 @@ impl<'a> Person<'a> {
     }
 
     fn parents_name(&self) -> Option<&'static str> {
-        match self.parent {
-            Some(p) => Some(p.name),
-            None => None,
-        }
+        self.parent.and_then(|p| Some(p.name))
     }
 }
 
