@@ -1,6 +1,6 @@
 struct Gradient {
-    start: [i8; 3],
-    steps: [i8; 3],
+    start: [i32; 3],
+    steps: [i32; 3],
     n: i32,
     total: i32,
 }
@@ -37,13 +37,13 @@ impl Iterator for Gradient {
 
 #[test]
 fn it_works() {
-  let g = Gradient::new("000000".to_string(), "ffffff".to_string(), 16);
+    let g = Gradient::new("000000".to_string(), "ffffff".to_string(), 16);
 
-  assert_eq!(g.take(2).collect::<Vec<String>>(), vec!["000000".to_string(), "111111".to_string()]);
+    assert_eq!(g.take(2).collect::<Vec<String>>(), vec!["000000".to_string(), "111111".to_string()]);
 }
 
 fn main() {
-  let g = Gradient::new("000000".to_string(), "ffffff".to_string(), 10000);
+    let g = Gradient::new("000000".to_string(), "ffffff".to_string(), 10000);
 
-  g.collect::<Vec<String>>();
+    g.collect::<Vec<String>>();
 }
