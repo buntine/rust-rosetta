@@ -2,6 +2,3 @@
 name = "rgb"
 version = "0.1.0"
 authors = ["Andrew Buntine Of Doom <bunts@hhd.com.au>"]
-
-[dependencies]
-regex = "0.1"

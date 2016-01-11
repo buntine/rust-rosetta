@@ -56,8 +56,8 @@ impl Iterator for Gradient {
 }
 
 fn main() {
+    // For benchmarking...
     let g = Gradient::new("000000", "ffffff", 10000);
-
     g.collect::<Vec<String>>();
 }
 
@@ -74,11 +74,4 @@ fn it_works() {
 
     assert_eq!(ga.collect::<Vec<String>>(), result_a.iter().map(|r| r.to_string()).collect::<Vec<String>>());
     assert_eq!(gb.collect::<Vec<String>>(), result_b.iter().map(|r| r.to_string()).collect::<Vec<String>>());
-
-    let a = Gradient::to_parts("000000");
-    let b = Gradient::to_parts("ffffff");
-    assert_eq!(Gradient::to_steps(&a[..], &b[..], 16), vec![-17.0, -17.0, -17.0]);
-
-    assert_eq!(Gradient::to_parts("000000"), vec![0, 0, 0]);
-    assert_eq!(Gradient::to_parts("ffffff"), vec![255, 255, 255]);
 } 
