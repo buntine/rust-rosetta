@@ -1,17 +1,33 @@
+extern crate regex;
+
+use regex::Regex;
+
 struct Gradient {
-    start: Vec<i32>,
-    steps: Vec<i32>,
-    n: i32,
-    total: i32,
+    start: Vec<u32>,
+    steps: Vec<u32>,
+    n: u32,
+    total: u32,
 }
 
 impl Gradient {
-    fn new(start: String, stop: String, steps: i32) -> Gradient {
+    fn to_parts(hex: &String) -> Vec<u32> {
+        vec![0, 0, 0]
+    }
+
+    fn to_steps(start: &[u32], stop: &[u32]) -> Vec<u32> {
+        vec![17, 17, 17]
+    }
+
+    pub fn new(start: String, stop: String, n: u32) -> Gradient {
+        let from = Gradient::to_parts(&start);
+        let to = Gradient::to_parts(&stop);
+        let steps = Gradient::to_steps(&from[..], &to[..]);
+
         Gradient{
-            start: vec![0, 0, 0],
-            steps: vec![17,17,17],
+            start: from,
+            steps: steps,
             n: 0,
-            total: steps
+            total: n,
         }
     }
 }
