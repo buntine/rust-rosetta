@@ -15,7 +15,7 @@ impl Gradient {
     fn to_steps(start: &[i32], stop: &[i32], n: i32) -> Vec<f32> {
         start.iter()
              .zip(stop.iter())
-             .map(|(&a, &b)| (a as f32 - b as f32) / (n as f32 - 1.0))
+             .map(|(&a, &b)| (a - b) as f32 / (n as f32 - 1.0))
              .collect()
     }
 
